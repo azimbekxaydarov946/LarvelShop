@@ -11,9 +11,12 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $page = request('page') ?? 1;
+        $rows = request('rows') ?? 100000;
+
         $products = Product::query()->with('category');
         if ($request->pagination) {
-            $products = $products->limit($request->pagination);
+            $products = $products->paginate($rows, ['*'], 'page name', $page);
         }
         if ($request->active) {
             $products = $products->where('active', 'like', '%' . $request->active . '%');
