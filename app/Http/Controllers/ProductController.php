@@ -9,10 +9,13 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
+        $request=request();
         $page = request('page') ?? 1;
         $rows = request('rows') ?? 100000;
+
+
 
         $products = Product::query()->with('category');
         if ($request->pagination) {
@@ -25,17 +28,9 @@ class ProductController extends Controller
         }
         $products = $products->get();
         if ($products) {
-            return response()->json([
-                'success' => true,
-                'data' => $products,
-                'msg' => "ok"
-            ]);
+            return response()->successJson($products);
         } else {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'msg' => "Error"
-            ]);
+            return response()->errorJson(500,"error");
         }
     }
 
@@ -45,17 +40,9 @@ class ProductController extends Controller
         $product = Product::create($product);
 
         if ($product) {
-            return response()->json([
-                'success' => true,
-                'data' => $product,
-                'msg' => "Muvaffaqiyatliy saqlandi"
-            ]);
+            return response()->successJson($product);
         } else {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'msg' => "Error"
-            ]);
+            return response()->errorJson(500,"error");
         }
     }
 
@@ -68,17 +55,9 @@ class ProductController extends Controller
 
             $product->update($params);
 
-            return response()->json([
-                'success' => true,
-                'data' => $product,
-                'msg' => "Muvaffaqiyatliy yangilandi"
-            ]);
+            return response()->successJson($product);
         } else {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'msg' => "Error"
-            ]);
+            return response()->errorJson(500,"error");
         }
     }
 
@@ -86,18 +65,9 @@ class ProductController extends Controller
     {
 
         if ($product) {
-
-            return response()->json([
-                'success' => true,
-                'data' => $product,
-                'msg' => "Muvaffaqiyatliy topildi"
-            ]);
+            return response()->successJson($product);
         } else {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'msg' => "Error"
-            ]);
+            return response()->errorJson(500,"error");
         }
     }
 
@@ -107,18 +77,9 @@ class ProductController extends Controller
         if ($product) {
 
             $product->delete();
-
-            return response()->json([
-                'success' => true,
-                'data' => $product,
-                'msg' => "Muvaffaqiyatliy o'chrildi"
-            ]);
+            return response()->successJson($product, 402);
         } else {
-            return response()->json([
-                'success' => false,
-                'data' => [],
-                'msg' => "Error"
-            ]);
+            return response()->errorJson(500,"error");
         }
     }
 }
