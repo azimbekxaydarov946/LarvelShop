@@ -8,23 +8,21 @@ class ResponseMixin {
 
 public function successJson(){
 
-    return function($data,$code=200){
+    return function($data,$code=200, $msg="OK"){
         return [
-            'success' => true,
+            'message' =>$code,
             'data' => $data,
-            'code' => $code,
-            'msg' => "ok"
+            'msg' => $msg
         ];
     };
 }
 
 public function errorJson(){
 
-    return function($msg, $code=500){
+    return function($code=500, $msg="ERROR"){
         return [
-            'success' => true,
+            'message' =>$code,
             'data' => [],
-            'code' => $code,
             'msg' => $msg
         ];
     };
