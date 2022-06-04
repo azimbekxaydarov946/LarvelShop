@@ -12,49 +12,42 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected $servies;
-    protected $serviesClass;
+    protected $model;
     protected $storeRequestClass;
     protected $updateRequestClass;
 
-    public function __construct()
-    {
-        $this->servies = app($this->serviesClass);
-    }
     public function index()
     {
-    dd($this->servies->index());
-        // $products = Product::query()->with('category')->get();
-        // return response()->successJson($products);
-        return $this->servies->index();
+        return $this->model->index();
     }
 
-    public function show($id)
+    public function find($id)
     {
-        $item = $this->servies->find($id);
+        $item = $this->model->find($id);
         return $item;
     }
 
-    public function store()
+    public function create()
     {
         $request = app($this->storeRequestClass);
         $data = $request->validated();
-        $item = $this->servies->store($data);
+        $item = $this->model->create($data);
 
         return response()->successJson($item);
     }
-    public function update($id)
+    public function edit($id)
     {
         $request = app($this->updateRequestClass);
         $data = $request->validated();
-        $item = $this->servies->update($id, $data);
+        $item = $id->update($data);
 
         return response()->successJson($item);
     }
-    public function destroy($id)
+    public function delete($id)
     {
-        $this->servies->destroy($id);
+        $id = $this->find($id);
+        $id=$id->delete();
 
-        return response()->successJson();
+        return response()->successJson($id,422);
     }
 }
